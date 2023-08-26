@@ -1,8 +1,21 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Row,Col } from 'react-bootstrap'
-import products from '../products'
+
 import Product from '../components/Product'
 const HomePage = () => {
+  const [products, setProducts] = useState([])
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      // we are using proxy, so we need not type localhost explicitly here
+      const data = await fetch('/api/products')
+      const products = await data.json()
+      // console.log(products);
+      setProducts(products)
+    }
+
+    fetchProducts()
+  },[])
   return (
     <>
      <h1>Latest Products</h1>
