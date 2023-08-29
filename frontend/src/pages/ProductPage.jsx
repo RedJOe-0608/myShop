@@ -1,44 +1,74 @@
-import {useState, useEffect} from 'react'
-import { Link, useParams } from 'react-router-dom'
-import {Row, Col,Image, ListGroup, Card, Button} from 'react-bootstrap'
+import { Link, useParams, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import {Row, Col,Image, ListGroup, Card, Button, FormControl} from 'react-bootstrap'
 import Rating from '../components/Rating'
+import { useGetProductDetailsQuery } from '../slices/productsApiSlice'
+import Loader from '../components/Loader'
+import Message from '../components/Message'
+import { useState } from 'react'
+import { addToCart } from '../slices/cartSlice'
 
 const ProductPage = () => {
-    const [product, setProduct] = useState({})
+    // const [product, setProduct] = useState({})
     const {id: productId} = useParams()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const [qty,setQty] = useState(1)
+
+ 
+    //First, we were fetching the product details using fetch and useEffect.
+
     // const product = products.find(product => product._id === productId)
     // console.log(product);
-    useEffect(() => {
-        const fetchProduct = async() => {
-            const data = await fetch(`/api/products/${productId}`)
-            const res = await data.json()
-            console.log(res);
-            setProduct(res)
-        }
+    // useEffect(() => {
+    //     const fetchProduct = async() => {
+    //         const data = await fetch(`/api/products/${productId}`)
+    //         const res = await data.json()
+    //         console.log(res);
+    //         setProduct(res)
+    //     }
 
-        fetchProduct()
-    },[productId])
+    //     fetchProduct()
+    // },[productId])
+
+
+    //Now, we are fetching with the help of RTK query.
+    const {data: product, isLoading, error} = useGetProductDetailsQuery(productId)
+
+    const addToCartHandler = () => {
+        dispatch(addToCart({...product, qty}))
+        navigate('/cart')
+    }
+
 
   return (
     <>
         <Link className='btn btn-light my-3' to="/">Go Back</Link>
-        <Row>
+        {isLoading ? (
+           <Loader />
+        ) : error ? (
+            <Message variant="danger">
+                {error?.data?.message || error.error}
+            </Message>
+        ) : (
+            <>
+            <Row>
             <Col md={5}>
-                <Image src={product.image} alt={product.name} fluid/>
+                <Image src={product?.image} alt={product?.name} fluid/>
             </Col>
             <Col md={4}>
                 <ListGroup variant='flush'>
                     <ListGroup.Item>
-                        <h3>{product.name}</h3>
+                        <h3>{product?.name}</h3>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                        <Rating value={product.rating} text={`${product.numReviews} Reviews`} />
+                        <Rating value={product?.rating} text={`${product?.numReviews} Reviews`} />
                     </ListGroup.Item>
                     <ListGroup.Item>
-                        Price: ${product.price}
+                        Price: ${product?.price}
                     </ListGroup.Item>
                     <ListGroup.Item>
-                        Description:{product.description}
+                        Description:{product?.description}
                     </ListGroup.Item>
                 </ListGroup>
             </Col>
@@ -49,7 +79,7 @@ const ProductPage = () => {
                             <Row>
                                 <Col>Price: </Col>
                                 <Col>
-                                    <strong>${product.price}</strong>
+                                    <strong>${product?.price}</strong>
                                 </Col>
                             </Row>
                         </ListGroup.Item>
@@ -57,15 +87,36 @@ const ProductPage = () => {
                             <Row>
                                 <Col>Status: </Col>
                                 <Col>
-                                    <strong>{product.countInStock > 0 ? 'In Stock' : "Out Of Stock"}</strong>
+                                    <strong>{product?.countInStock > 0 ? 'In Stock' : "Out Of Stock"}</strong>
                                 </Col>
                             </Row>
                         </ListGroup.Item>
+                        {product?.countInStock > 0 && (
+                            <ListGroup.Item>
+                                <Row>
+                                    <Col>Qty:</Col>
+                                    <Col>
+                                    <FormControl
+                                    as='select'
+                                    value={qty}
+                                    onChange={(e) => setQty(Number(e.target.value))}
+                                    >
+                                        {[...Array(product.countInStock).keys()].map((x) => (
+                                            <option key={x+1} value={x+1}>
+                                                {x+1}
+                                            </option>
+                                        ))}
+                                    </FormControl>
+                                    </Col>
+                                </Row>
+                            </ListGroup.Item>
+                        )}
                         <ListGroup.Item>
                             <Button
                             className='btn-block'
                             type='button'
-                            disabled={product.countInStock === 0}
+                            disabled={product?.countInStock === 0}
+                            onClick={addToCartHandler}
                             >
                                 Add To Cart
                             </Button>
@@ -74,6 +125,9 @@ const ProductPage = () => {
                 </Card>
             </Col>
         </Row>
+            </>
+        )}
+        
       
     </>
   )
