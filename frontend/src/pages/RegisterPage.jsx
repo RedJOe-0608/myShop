@@ -13,6 +13,8 @@ const RegisterPage = () => {
     const [name,setName] = useState('')
     const [password,setPassword] = useState('')
     const [confirmPassword,setConfirmPassword] = useState('')
+    const [register,{isLoading}] = useRegisterMutation()
+    const {userInfo} = useSelector((state) => state.auth)
 
     const submitHandler = async (e) => {
         e.preventDefault()
@@ -36,8 +38,7 @@ const RegisterPage = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const [register,{isLoading}] = useRegisterMutation()
-    const {userInfo} = useSelector((state) => state.auth)
+    
     
 
     const {search} = useLocation()

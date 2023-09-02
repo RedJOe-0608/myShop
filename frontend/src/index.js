@@ -17,6 +17,15 @@ import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ShippingPage from './pages/ShippingPage';
+import PrivateRoute from './components/PrivateRoute';
+import PaymentPage from './pages/PaymentPage';
+import PlaceOrderPage from './pages/PlaceOrderPage';
+import OrderPage from './pages/OrderPage';
+import {PayPalScriptProvider} from '@paypal/react-paypal-js';
+import ProfilePage from './pages/ProfilePage';
+import AdminRoute from './components/AdminRoute';
+import AdminOrderListPage from './pages/AdminOrderListPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +36,21 @@ const router = createBrowserRouter(
       <Route path='/cart'  element={<CartPage />} />
       <Route path='/login'  element={<LoginPage />} />
       <Route path='/register'  element={<RegisterPage />} />
+
+      {/* private routes */}
+      <Route path='' element={<PrivateRoute />}>
+        <Route path='/shipping'  element={<ShippingPage />} />
+        <Route path='/payment'  element={<PaymentPage />} />
+        <Route path='/placeorder'  element={<PlaceOrderPage />} />
+        <Route path='/orders/:id'  element={<OrderPage />} />
+        <Route path='/profile'  element={<ProfilePage />} />
+      </Route>
+
+      <Route path='' element={<AdminRoute />}>
+      <Route path='/admin/orderlist'  element={<AdminOrderListPage />} />
+
+
+      </Route>
     </Route>
   )
 )
@@ -36,7 +60,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <PayPalScriptProvider >
+        <RouterProvider router={router} />
+      </PayPalScriptProvider>
     </Provider>
   </React.StrictMode>
 );
