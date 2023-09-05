@@ -8,6 +8,7 @@ import Message from '../components/Message'
 import { useState } from 'react'
 import { addToCart } from '../slices/cartSlice'
 import {toast} from 'react-toastify'
+import Meta from '../components/Meta'
 
 const ProductPage = () => {
     // const [product, setProduct] = useState({})
@@ -70,6 +71,7 @@ const ProductPage = () => {
             </Message>
         ) : (
             <>
+            <Meta title={product.name} />
             <Row>
             <Col md={5}>
                 <Image src={product?.image} alt={product?.name} fluid/>

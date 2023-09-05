@@ -29,7 +29,7 @@ table th {
 }
 
 .review {
-  margin-top: 30px;
+  margin-top: 30px!important;
 }
 
 .review h2 {
@@ -46,7 +46,7 @@ table th {
 .carousel-caption {
   position: absolute;
   width: 100%;
-  left: 0;
+  left: 0!important;
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);

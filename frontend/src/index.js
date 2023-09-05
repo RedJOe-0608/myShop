@@ -10,6 +10,7 @@ import './assets/styles/index.css';
 import './assets/styles/bootstrap.custom.css';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import {Provider} from 'react-redux'
+import {HelmetProvider} from 'react-helmet-async'
 import store from './store';
 import App from './App';
 import HomePage from './pages/HomePage';
@@ -36,7 +37,9 @@ const router = createBrowserRouter(
     //This is like a layout component that wraps everything.
     <Route path='/' element={<App />}>
       <Route index element={<HomePage />} />
+      <Route path='/search/:keyword' element={<HomePage />} />
       <Route path='/page/:pageNumber' element={<HomePage />} />
+      <Route path='/search/:keyword/page/:pageNumber' element={<HomePage />} />
       <Route path='/product/:id'  element={<ProductPage />} />
       <Route path='/cart'  element={<CartPage />} />
       <Route path='/login'  element={<LoginPage />} />
@@ -69,11 +72,13 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <HelmetProvider>
     <Provider store={store}>
       <PayPalScriptProvider >
         <RouterProvider router={router} />
       </PayPalScriptProvider>
     </Provider>
+  </HelmetProvider>
   </React.StrictMode>
 );
 
