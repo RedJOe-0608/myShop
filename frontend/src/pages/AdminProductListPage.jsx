@@ -6,9 +6,12 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { useGetProductsQuery, useCreateProductMutation, useDeleteProductMutation } from '../slices/productsApiSlice'
 import {toast} from 'react-toastify'
+import { useParams } from 'react-router-dom'
+import Paginate from '../components/Paginate'
 const AdminProductListPage = () => {
 
-    const {data:products, isLoading,error,refetch} = useGetProductsQuery()
+    const {pageNumber} = useParams()
+    const {data, isLoading,error,refetch} = useGetProductsQuery({pageNumber})
     // console.log(products);
     const [createProduct, {isLoading: loadingCreate}] = useCreateProductMutation()
 
@@ -70,7 +73,7 @@ const AdminProductListPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {products.map((product) => (
+                    {data.products.map((product) => (
                         <tr key={product._id}>
                             <th>{product._id}</th>
                             <th>{product.name}</th>
@@ -92,7 +95,7 @@ const AdminProductListPage = () => {
                     ))}
                     </tbody>
             </Table>
-            
+            <Paginate pages={data.pages} page={data.page} isAdmin={true} />
             </>
         )}
       

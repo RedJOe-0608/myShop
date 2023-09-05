@@ -5,8 +5,13 @@ import Product from "../models/productModel.js";
 //@route GET /api/products
 //@access public
 const getProducts = asyncHandler(async(req,res) => {
-    const products = await Product.find({});
-    res.json(products)
+    const pageSize = 3
+    const page = Number(req.query.pageNumber) || 1
+    const count = await Product.countDocuments()
+
+    const products = await Product.find({}).limit(pageSize).skip(pageSize *(page-1))
+    res.json({products, page, pages: Math.ceil(count/pageSize)})
+    
 });
 
 
@@ -86,4 +91,38 @@ const deleteProduct = asyncHandler(async(req,res) => {
     }
  });
 
-export {getProductById, getProducts, createProduct, updateProduct, deleteProduct}
+//@desc Create a new review
+//@route DELETE /api/products/:id/reviews
+//@access private
+const createProductReview = asyncHandler(async(req,res) => {
+    const {rating, comment} = req.body
+    const product = await Product.findById(req.params.id)
+ 
+    if(product){
+        //We don't want the same person to review the same product multiple times
+        const alreadyReviewed = product.reviews.find((review) => review.user.toString() === req.user._id.toString())
+        if(alreadyReviewed){
+            res.status(400)
+            throw new Error("Product already reviewed!")
+        }
+        const review = {
+            name: req.user.name,
+            rating: Number(rating),
+            comment,
+            user: req.user._id,
+        }
+
+        product.reviews.push(review)
+        product.numReviews = product.reviews.length
+
+        product.rating = product.reviews.reduce((acc,review) => acc +review.rating,0) / product.reviews.length
+
+        await product.save();
+        res.status(201).json({message: 'Review Added'})
+    }else{
+     res.status(404)
+     throw new Error("Resource not found!")
+    }
+ });
+
+export {getProductById, getProducts, createProduct, updateProduct, deleteProduct,createProductReview}

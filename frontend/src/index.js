@@ -36,6 +36,7 @@ const router = createBrowserRouter(
     //This is like a layout component that wraps everything.
     <Route path='/' element={<App />}>
       <Route index element={<HomePage />} />
+      <Route path='/page/:pageNumber' element={<HomePage />} />
       <Route path='/product/:id'  element={<ProductPage />} />
       <Route path='/cart'  element={<CartPage />} />
       <Route path='/login'  element={<LoginPage />} />
@@ -53,6 +54,7 @@ const router = createBrowserRouter(
       <Route path='' element={<AdminRoute />}>
       <Route path='/admin/orderlist'  element={<AdminOrderListPage />} />
       <Route path='/admin/productlist'  element={<AdminProductListPage />} />
+      <Route path='/admin/productlist/:pageNumber'  element={<AdminProductListPage />} />
       <Route path='/admin/product/:id/edit'  element={<AdminProductEditPage />} />
       <Route path='/admin/userlist'  element={<AdminUserListPage />} />
       <Route path='/admin/user/:id/edit'  element={<AdminUserEditScreen />} />

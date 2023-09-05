@@ -18,12 +18,12 @@ const AdminProductEditPage = () => {
   const [countInStock, setCountInStock] = useState(0)
   const [description, setDescription] = useState('')
 
-  const {data:product, isLoading, error, refetch } = useGetProductDetailsQuery(productId)
+  const {data:product, isLoading, error } = useGetProductDetailsQuery(productId)
   // console.log(product);
   const [updateProduct, {isLoading: loadingUpdate}] = useUpdateProductMutation()
   const navigate = useNavigate()
 
-  const [uploadProductImage, {isLoading: loadingUpload}] = useUploadProductImageMutation()
+  const [uploadProductImage] = useUploadProductImageMutation()
 
 
 
@@ -49,8 +49,7 @@ const AdminProductEditPage = () => {
     image,
     brand,
     category,
-    countInStock,
-    description
+    countInStock
   }
   const result = await updateProduct(updatedProduct)
   if(result.error){
