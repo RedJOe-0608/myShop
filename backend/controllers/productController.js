@@ -24,4 +24,66 @@ const getProductById = asyncHandler(async(req,res) => {
     throw new Error('Resource not found');
 })
 
-export {getProductById, getProducts}
+//@desc Create a product
+//@route POST /api/products
+//@access private/admin
+const createProduct = asyncHandler(async(req,res) => {
+    const product = new Product({
+        name: 'sample name',
+        price: 0,
+        user: req.user._id,
+        image: '/images/sample.jpg',
+        brand: 'Sample Brand',
+        category: 'Sample category',
+        countInStock: 0,
+        numReviews: 0,
+        description: 'Sample Description',
+
+    })
+
+    const createdProduct = product.save()
+    res.status(201).json(createdProduct)
+});
+
+
+//@desc Update a product
+//@route PUT /api/products/:id
+//@access private/admin
+const updateProduct = asyncHandler(async(req,res) => {
+   const {name,price, description, image, brand, category, countInStock} = req.body
+
+   const product = await Product.findById(req.params.id)
+
+   if(product){
+    product.name = name
+    product.price = price
+    product.description = description
+    product.image = image
+    product.category = category
+    product.countInStock = countInStock
+
+    const updatedProduct = product.save()
+    res.json(updatedProduct)
+   }else{
+    res.status(404)
+    throw new Error("Resource not found!")
+   }
+});
+
+//@desc Delete a product
+//@route DELETE /api/products/:id
+//@access private/admin
+const deleteProduct = asyncHandler(async(req,res) => {
+    
+    const product = await Product.findById(req.params.id)
+ 
+    if(product){
+        await Product.deleteOne({_id: product._id})
+        res.status(200).json({message: "Product Deleted"})
+    }else{
+     res.status(404)
+     throw new Error("Resource not found!")
+    }
+ });
+
+export {getProductById, getProducts, createProduct, updateProduct, deleteProduct}
