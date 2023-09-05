@@ -17,9 +17,7 @@ const HomePage = () => {
   return (
     <>
     {!keyword ? <ProductCarousel /> : (<Link to='/' className='btn btn-light mb-4'>Go Back</Link>)}
-   {isLoading ? (
-    <Loader />
-   ) : error ? (
+   { error ? (
     <Message variant="danger">
                 {error?.data?.message || error.error}
             </Message>
