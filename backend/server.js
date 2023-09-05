@@ -33,6 +33,16 @@ app.get('/api/config/paypal', (req,res) => res.send({clientId: process.env.PAYPA
 const __dirname = path.resolve() //set __dirname to the current working directory
 app.use('/uploads',express.static(path.join(__dirname,'/uploads')))
 
+if(process.env.NODE_ENV === 'production'){
+        // set static folder
+        app.use(express.static(path.join(__dirname,'/frontend/build')))
+
+        //any route that is not api will be redirected to index.html
+        app.get('*',(req,res) => {
+            res.sendFile(path.resolve(__dirname,"frontend",'build','index.html'))
+        })
+}
+
 app.use(notFound)
 app.use(errorHandler)
 

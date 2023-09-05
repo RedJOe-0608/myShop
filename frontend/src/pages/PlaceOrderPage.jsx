@@ -6,7 +6,7 @@ import {toast} from 'react-toastify'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { useCreateOrderMutation } from '../slices/ordersApiSlice'
-import {clearCartItems, createCartItems} from '../slices/cartSlice'
+import {clearCartItems} from '../slices/cartSlice'
 import CheckoutSteps from '../components/CheckoutSteps'
 
 const PlaceOrderPage = () => {
