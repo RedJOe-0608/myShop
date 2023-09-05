@@ -3,7 +3,6 @@ import { Row,Col } from 'react-bootstrap'
 
 import Product from '../components/Product'
 import { useGetProductsQuery } from '../slices/productsApiSlice'
-import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { Link, useParams } from 'react-router-dom'
 import Paginate from '../components/Paginate'
@@ -12,7 +11,7 @@ import Meta from '../components/Meta'
 const HomePage = () => {
 
   const {pageNumber,keyword} = useParams()
-  const {data, isLoading, error} = useGetProductsQuery({keyword,pageNumber})
+  const {data, error} = useGetProductsQuery({keyword,pageNumber})
 
   return (
     <>
