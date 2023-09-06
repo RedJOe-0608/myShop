@@ -32,8 +32,8 @@ const HomePage = () => {
         ))}
     </Row> 
     <Paginate
-    pages={data.pages}
-    page={data.page} 
+    pages={data?.pages}
+    page={data?.page} 
     keyword= {keyword ? keyword : ''}
     />
     </>
