@@ -25,7 +25,7 @@ const HomePage = () => {
     <Meta />
     <h1>Latest Products</h1>
     <Row>
-        {data.products.map(product =>(
+        {data?.products?.map(product =>(
             <Col key={product._id} sm={12} md={6} lg={4} xl={3} className='my-3'>
             <Product product={product} />
             </Col>
