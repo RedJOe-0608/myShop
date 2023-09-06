@@ -127,7 +127,7 @@ const PlaceOrderPage = () => {
                     </ListGroup.Item>
 
                     <ListGroup.Item>
-                    { error?.message && <Message variant='danger'>{error?.message}</Message> }
+                    { error && <Message variant='danger'>{error?.data?.message || error?.error}</Message> }
                     </ListGroup.Item>
                     <ListGroup.Item>
                         <Button type='submit' className='btn-block' disabled={cart.cartItems.length === 0}

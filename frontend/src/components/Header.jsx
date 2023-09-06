@@ -7,6 +7,7 @@ import {logout} from '../slices/authSlice'
 import logo from '../assets/logo.png'
 import {useSelector, useDispatch} from 'react-redux'
 import SearchBox from './SearchBox'
+import { resetCart } from '../slices/cartSlice'
 
 const Header = () => {
     const {cartItems} = useSelector((state) => state.cart )
@@ -20,6 +21,7 @@ const Header = () => {
        try {
             await logoutApiCall().unwrap()
             dispatch(logout())
+            dispatch(resetCart())
             navigate('/login')
        } catch (error) {
             console.log(error);

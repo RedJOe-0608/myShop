@@ -59,7 +59,7 @@ const AdminProductListPage = () => {
         </Row>
         {loadingCreate && <Loader />}
         {loadingDelete && <Loader />}
-        {isLoading ? <Loader /> : error ? <Message variant="danger">{error}</Message> : (
+        {isLoading ? <Loader /> : error ? <Message variant="danger">{error?.data?.message || error?.error}</Message> : (
             <>
             <Table stripped="true" hover responsive className='table-sm'>
                 <thead>
